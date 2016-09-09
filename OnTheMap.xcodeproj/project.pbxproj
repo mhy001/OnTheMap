@@ -14,6 +14,10 @@
 		E93AB4051D77EF5D00A01135 /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93AB4041D77EF5D00A01135 /* OnTheMapUITests.swift */; };
 		E93AB4181D79192400A01135 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E93AB4171D79192400A01135 /* LaunchScreen.xib */; };
 		E93AB41A1D79250100A01135 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93AB4191D79250100A01135 /* LoginViewController.swift */; };
+		E967A87E1D7B8B19003B4DB5 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967A87D1D7B8B19003B4DB5 /* GCDBlackBox.swift */; };
+		E967A8811D7B8C64003B4DB5 /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967A8801D7B8C64003B4DB5 /* UdacityClient.swift */; };
+		E967A8831D7B8CAA003B4DB5 /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967A8821D7B8CAA003B4DB5 /* UdacityConstants.swift */; };
+		E967A8871D7E1707003B4DB5 /* RequestTasksProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E967A8861D7E1707003B4DB5 /* RequestTasksProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,10 @@
 		E93AB4061D77EF5D00A01135 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E93AB4171D79192400A01135 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E93AB4191D79250100A01135 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		E967A87D1D7B8B19003B4DB5 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
+		E967A8801D7B8C64003B4DB5 /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
+		E967A8821D7B8CAA003B4DB5 /* UdacityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityConstants.swift; sourceTree = "<group>"; };
+		E967A8861D7E1707003B4DB5 /* RequestTasksProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTasksProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				E93AB3E41D77EF5D00A01135 /* AppDelegate.swift */,
+				E967A87D1D7B8B19003B4DB5 /* GCDBlackBox.swift */,
 				E93AB4121D79172300A01135 /* Model */,
 				E93AB4131D79172A00A01135 /* View */,
 				E93AB4141D79173000A01135 /* Controller */,
@@ -128,6 +137,8 @@
 		E93AB4121D79172300A01135 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E967A8861D7E1707003B4DB5 /* RequestTasksProtocol.swift */,
+				E967A87F1D7B8C4E003B4DB5 /* Udacity */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -163,6 +174,15 @@
 				E93AB3F01D77EF5D00A01135 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E967A87F1D7B8C4E003B4DB5 /* Udacity */ = {
+			isa = PBXGroup;
+			children = (
+				E967A8801D7B8C64003B4DB5 /* UdacityClient.swift */,
+				E967A8821D7B8CAA003B4DB5 /* UdacityConstants.swift */,
+			);
+			name = Udacity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,7 +319,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E967A8811D7B8C64003B4DB5 /* UdacityClient.swift in Sources */,
+				E967A8831D7B8CAA003B4DB5 /* UdacityConstants.swift in Sources */,
 				E93AB41A1D79250100A01135 /* LoginViewController.swift in Sources */,
+				E967A87E1D7B8B19003B4DB5 /* GCDBlackBox.swift in Sources */,
+				E967A8871D7E1707003B4DB5 /* RequestTasksProtocol.swift in Sources */,
 				E93AB3E51D77EF5D00A01135 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +543,7 @@
 				E93AB40B1D77EF5D00A01135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E93AB40C1D77EF5D00A01135 /* Build configuration list for PBXNativeTarget "OnTheMapTests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +552,7 @@
 				E93AB40E1D77EF5D00A01135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E93AB40F1D77EF5D00A01135 /* Build configuration list for PBXNativeTarget "OnTheMapUITests" */ = {
 			isa = XCConfigurationList;
@@ -535,6 +561,7 @@
 				E93AB4111D77EF5D00A01135 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
