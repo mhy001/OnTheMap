@@ -6,22 +6,24 @@
 //  Copyright © 2016 Myang. All rights reserved.
 //
 
+// MARK: UdcaityClient (Constants)
+
 extension UdacityClient {
     
     // MARK: Constants
     struct Constants {
         
         // URLS
-        static let ApiScheme = "https"
-        static let ApiHost = "udacity.com"
-        static let ApiPath = "/api"
+        static let Scheme = "https"
+        static let Host = "www.udacity.com"
+        static let APIPath = "/api"
+        static let SignUpPath = "/account/auth#!/signup"
     }
     
     // MARK: Methods
     struct Methods {
-        
-        static let Session = "/session"
-        static let UserData = "users/{id}"
+        static let Session = "\(Constants.APIPath)/session"
+        static let UserData = "\(Constants.APIPath)/users/{id}"
     }
     
     // MARK: URL Keys
@@ -29,12 +31,14 @@ extension UdacityClient {
         static let UserID = "id"
     }
     
+    // MARK: HTTP Header Fields
     struct HTTPHeaderFields {
         static let Accept = "Accept"
         static let ContentType = "Content-Type"
         static let XSRFToken = "X-XSRF-TOKEN"
     }
     
+    // MARK: HTTP Header Values
     struct HTTPHeaderValues {
         static let JSON = "application/json"
     }
@@ -54,6 +58,7 @@ extension UdacityClient {
         static let Error = "error"
         static let Account = "account"
         static let UserKey = "key"
+        static let Registered = "registered"
         static let Session = "session"
     }
     

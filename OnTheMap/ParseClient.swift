@@ -1,22 +1,26 @@
 //
-//  UdacityClient.swift
+//  ParseClient.swift
 //  OnTheMap
 //
-//  Created by Mark Yang on 9/3/16.
+//  Created by Mark Yang on 9/11/16.
 //  Copyright © 2016 Myang. All rights reserved.
 //
 
 import Foundation
 
-class UdacityClient: NSObject, RequestTasks {
-    
+class ParseClient: NSObject, RequestTasks {
+
     // MARK: Properties
-    var userID: String? = nil
+    let commonHeaders = [
+        HTTPHeaderFields.ApplicationID: Constants.ApplicationID,
+        HTTPHeaderFields.APIKey: Constants.APIKey
+    ]
+    var studentLocations = [StudentLocation]()
     
     // MARK: RequestTasks protocol
-    class func sharedInstance() -> UdacityClient {
+    class func sharedInstance() -> ParseClient {
         struct Singleton {
-            static var sharedInstance = UdacityClient()
+            static var sharedInstance = ParseClient()
         }
         return Singleton.sharedInstance
     }
@@ -25,13 +29,12 @@ class UdacityClient: NSObject, RequestTasks {
         var components = URLComponents()
         components.scheme = Constants.Scheme
         components.host = Constants.Host
-        components.path = (withPathExtension ?? "")
+        components.path = Constants.APIPath + (withPathExtension ?? "")
         
         return components.url!
     }
     
     func convertData(_ data: Data, completionHandlerForConvertData: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
-        let newData = (data as NSData).subdata(with: NSMakeRange(5, data.count - 5))
-        baseConvertData(newData, completionHandlerForConvertData: completionHandlerForConvertData)
+        baseConvertData(data, completionHandlerForConvertData: completionHandlerForConvertData)
     }
 }

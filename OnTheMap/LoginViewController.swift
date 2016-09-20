@@ -10,10 +10,11 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    // Properties
+    // MARK: Properties
+    let udacityClient = UdacityClient.sharedInstance()
     var keyboardOnScreen = false
     
-    // Outlets
+    // MARK: Outlets
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -22,13 +23,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var facebookLoginButton: UIButton!
     
     
-    // UIViewController
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        debugTextField.text = ""
-    }
-    
+    // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,110 +35,124 @@ class LoginViewController: UIViewController {
 //        subscribeToNotification(UIKeyboardDidHideNotification, selector: #selector(keyboardDidHide))
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        debugTextField.text = ""
+        passwordTextField.text = ""
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
 //        unsubscribeFromAllNotifications()
     }
     
-    // Actions
-    @IBAction func loginPressed(sender: AnyObject) {
+    // MARK: Actions
+    @IBAction func loginPressed(_ sender: AnyObject) {
         if emailTextField.text!.isEmpty || passwordTextField.text!.isEmpty {
-            debugTextField.text = "Email or password field empty"
+            displayError(self, error: NSError(domain: "loginPressed", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.EmptyCredentials]))
         } else {
-            UdacityClient.sharedInstance().authenticateWithViewController(username: emailTextField.text!, password: passwordTextField.text!) { (success, error) in
-                performUIUpdatesOnMain {
-                    if success {
+            udacityClient.authenticate(username: emailTextField.text!, password: passwordTextField.text!) { (success, error) in
+                if success {
+                    performUIUpdatesOnMain {
                         self.completeLogin()
-                    } else {
-                        print(error)
-                        self.displayError(error!.localizedDescription)
                     }
+                } else {
+                    if let error = error {
+                        displayError(self, error: error)
+                    } else {
+                        print("")
+                    }
+                    
                 }
             }
         }
     }
     
-    private func completeLogin() {
-        
+    @IBAction func signUpPressed(_ sender: AnyObject) {
+//        UdacityClient.sharedInstance().authenticateWithViewController(self) { (success, error) in
+//            
+//        }
+    }
+    
+    
+    fileprivate func completeLogin() {
+        let controller = storyboard!.instantiateViewController(withIdentifier: "ManagerNavigationController") as! UINavigationController
+        present(controller, animated: true, completion: nil)
     }
 }
 
+// MARK: LoginViewController: UITextFieldDelegate
 extension LoginViewController: UITextFieldDelegate {
     
     // UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
     // Keyboard view management
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         if !keyboardOnScreen {
             view.frame.origin.y -= keyboardHeight(notification)
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         if keyboardOnScreen {
             view.frame.origin.y = 0
         }
     }
     
-    func keyboardDidShow(notification: NSNotification) {
+    func keyboardDidShow(_ notification: Notification) {
         keyboardOnScreen = true
     }
     
-    func keyboardDidHide(notification: NSNotification) {
+    func keyboardDidHide(_ notification: Notification) {
         keyboardOnScreen = false
     }
     
-    private func keyboardHeight(notification: NSNotification) -> CGFloat {
-        let userInfo = notification.userInfo!
+    fileprivate func keyboardHeight(_ notification: Notification) -> CGFloat {
+        let userInfo = (notification as NSNotification).userInfo!
         let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue
-        return keyboardSize.CGRectValue().height
+        return keyboardSize.cgRectValue.height
     }
 }
 
-// LoginViewController (Notifications)
+// MARK: LoginViewController (Notifications)
 extension LoginViewController {
     
-    private func subscribeToNotification(notification: String, selector: Selector) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: selector, name: notification, object: nil)
+    fileprivate func subscribeToNotification(_ notification: String, selector: Selector) {
+        NotificationCenter.default.addObserver(self, selector: selector, name: NSNotification.Name(rawValue: notification), object: nil)
     }
     
-    private func unsubscribeFromAllNotifications() {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+    fileprivate func unsubscribeFromAllNotifications() {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
-// LoginViewController (Configure UI)
+// MARK: LoginViewController (UI)
 extension LoginViewController {
     
-    private func displayError(errorString: String?) {
-        if let errorString = errorString {
-            debugTextField.text = errorString
-        }
-    }
-    
-    private func setUIEnabled(enable: Bool) {
-        emailTextField.enabled  = enable
-        passwordTextField.enabled = enable
-        loginButton.enabled = enable
-        signUpButton.enabled = enable
+    fileprivate func setUIEnabled(_ enable: Bool) {
+        emailTextField.isEnabled  = enable
+        passwordTextField.isEnabled = enable
+        loginButton.isEnabled = enable
+        signUpButton.isEnabled = enable
         debugTextField.text = ""
-        facebookLoginButton.enabled = enable
+        facebookLoginButton.isEnabled = enable
     }
     
-    private func configureUI() {
+    fileprivate func configureUI() {
         configureTextField(emailTextField)
         configureTextField(passwordTextField)
     }
     
-    private func configureTextField(textField: UITextField) {
-        textField.autocorrectionType = UITextAutocorrectionType.No
+    fileprivate func configureTextField(_ textField: UITextField) {
+        textField.autocorrectionType = UITextAutocorrectionType.no
         textField.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha:0.75)
-        textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.white])
         textField.delegate = self
     }
 }

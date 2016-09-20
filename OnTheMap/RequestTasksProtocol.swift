@@ -11,107 +11,125 @@ import Foundation
 protocol RequestTasks {
     associatedtype requestClient
     static func sharedInstance() -> requestClient
-    func getURL(withPathExtension: String?) -> NSURL
-    func convertData(data: NSData, completionHandlerForConvertData: (result: AnyObject!, error: NSError?) -> Void)
+    func getURL(_ withPathExtension: String?) -> URL
+    func convertData(_ data: Data, completionHandlerForConvertData: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void)
 }
 
 extension RequestTasks {
     
     // MARK: GET
-    func taskForGETMethod(baseURL: NSURL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
-        return baseTaskMethod("GET", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForGET)
+    func taskForGETMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        baseTaskMethod("GET", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForGET)
     }
     
     // MARK: POST
-    func taskForPOSTMethod(baseURL: NSURL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPOST: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
-        return baseTaskMethod("POST", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPOST)
+    func taskForPOSTMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        baseTaskMethod("POST", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPOST)
     }
     
     // MARK: DELETE
-    func taskForDELETEMethod(baseURL: NSURL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForDELETE: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
-        return baseTaskMethod("DELETE", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForDELETE)
+    func taskForDELETEMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForDELETE: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        baseTaskMethod("DELETE", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForDELETE)
     }
     
     
-    // MARK: Helpers
-    private func baseTaskMethod(httpMethod: String, baseURL: NSURL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForTask: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    // MARK: Private Helpers
+    fileprivate func baseTaskMethod(_ httpMethod: String, baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForTask: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         // Build the final URL, Configure the request
-        let request = NSMutableURLRequest(URL: addURLParameters(baseURL, parameters: parameters))
-        request.HTTPMethod = httpMethod
+        var request = URLRequest(url: addURLParameters(baseURL, parameters: parameters))
+        request.httpMethod = httpMethod
         
-        if let httpHeaders = httpHeaders where !httpHeaders.isEmpty {
+        if let httpHeaders = httpHeaders , !httpHeaders.isEmpty {
             for(key, value) in httpHeaders {
                 request.addValue(value, forHTTPHeaderField: key)
             }
         }
-        if let jsonBody = jsonBody where jsonBody.characters.count > 0 {
-            request.HTTPBody = jsonBody.dataUsingEncoding(NSUTF8StringEncoding)
+        if let jsonBody = jsonBody , jsonBody.characters.count > 0 {
+            request.httpBody = jsonBody.data(using: String.Encoding.utf8)
         }
         
         // Make the request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) in
-            print(response)
-            print("REQUEST TYPE: \(request.HTTPMethod)")
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             if self.checkForRequestErrors("taskFor\(httpMethod)Method", data: data, response: response, error: error, completionHandlerForErrorCheck: completionHandlerForTask) {
                 self.convertData(data!, completionHandlerForConvertData: completionHandlerForTask)
             }
-        }
+        }) 
         
         // Start the request
         task.resume()
-        
-        return task
     }
     
-    private func addURLParameters(baseURL: NSURL, parameters: [String: AnyObject]?) -> NSURL {
+    fileprivate func addURLParameters(_ baseURL: URL, parameters: [String: AnyObject]?) -> URL {
         
-        guard let parameters = parameters where !parameters.isEmpty else {
+        guard let parameters = parameters , !parameters.isEmpty else {
             return baseURL
         }
         
-        let components = NSURLComponents(URL: baseURL, resolvingAgainstBaseURL: false)!
-        components.queryItems = [NSURLQueryItem]()
+        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+        components.queryItems = [URLQueryItem]()
         
         for (key, value) in parameters {
-            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
+            let queryItem = URLQueryItem(name: key, value: "\(value)")
             components.queryItems!.append(queryItem)
         }
         
-        return components.URL!
+        return components.url!
     }
     
-    private func checkForRequestErrors(domain: String, data: NSData? , response: NSURLResponse?, error: NSError?, completionHandlerForErrorCheck: (result: AnyObject!, error: NSError?) -> Void) -> Bool {
+    fileprivate func checkForRequestErrors(_ domain: String, data: Data? , response: URLResponse?, error: Error?, completionHandlerForErrorCheck: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> Bool {
         
-        func sendError(error: String) {
+        func sendError(_ error: String) {
             let userInfo = [NSLocalizedDescriptionKey: error]
-            completionHandlerForErrorCheck(result: nil, error: NSError(domain: domain, code: 1, userInfo: userInfo))
+            completionHandlerForErrorCheck(nil, NSError(domain: domain, code: 0, userInfo: userInfo))
         }
         
         // GUARD: Was there an error?
         guard (error == nil) else {
-            sendError("There was an error with the request: \(error)")
+            sendError(error!.localizedDescription)
             return false
         }
         
-        // GUARD: Was the response a successful 2xx?
-        guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-            sendError("The request returned a status code other than 2xxx")
+        // Was the response a successful 2xx?
+        if let statusCode = (response as? HTTPURLResponse)?.statusCode , statusCode < 200 || statusCode > 299 {
+            
+            // Is there more info in the response?
+            if let data = data {
+                self.convertData(data, completionHandlerForConvertData: completionHandlerForErrorCheck)
+            } else {
+                sendError("Service responsed with \(statusCode)")
+            }
+            
             return false
         }
         
         // GUARD: Was there any data returned?
         guard (data != nil) else {
-            sendError("No data was returned by the request")
+            sendError("Service did not return any data")
             return false
         }
         
         return true
     }
     
-    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
-        if method.rangeOfString("{\(key)}") != nil {
-            return method.stringByReplacingOccurrencesOfString("{\(key)}", withString: value)
+    // MARK: Public Helpers
+    func baseConvertData(_ data: Data, completionHandlerForConvertData: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        var parsedResult: AnyObject!
+        
+        do {
+            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+        } catch {
+            let userInfo = [NSLocalizedDescriptionKey: "Could not parse the data: \(data)"]
+            completionHandlerForConvertData(nil, NSError(domain: "convertData", code: 0, userInfo: userInfo))
+            return
+        }
+        
+        completionHandlerForConvertData(parsedResult, nil)
+    }
+    
+    func substituteKeyInMethod(_ method: String, key: String, value: String) -> String? {
+        if method.range(of: "{\(key)}") != nil {
+            return method.replacingOccurrences(of: "{\(key)}", with: value)
         } else {
             return nil
         }
