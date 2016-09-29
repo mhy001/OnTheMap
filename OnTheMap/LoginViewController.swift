@@ -51,20 +51,30 @@ class LoginViewController: UIViewController {
     // MARK: Actions
     @IBAction func loginPressed(_ sender: AnyObject) {
         if emailTextField.text!.isEmpty || passwordTextField.text!.isEmpty {
-            displayError(self, error: NSError(domain: "loginPressed", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.EmptyCredentials]))
+            displayError(host: self, error: NSError(domain: "loginPressed", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.EmptyCredentials]))
         } else {
+            let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            loadingIndicator.center = view.center
+            loadingIndicator.startAnimating()
+            view.addSubview(loadingIndicator)
+            setUIEnabled(false)
+
             udacityClient.authenticate(username: emailTextField.text!, password: passwordTextField.text!) { (success, error) in
+                performUIUpdatesOnMain {
+                    loadingIndicator.stopAnimating()
+                    loadingIndicator.removeFromSuperview()
+                    self.setUIEnabled(true)
+                }
                 if success {
                     performUIUpdatesOnMain {
                         self.completeLogin()
                     }
                 } else {
                     if let error = error {
-                        displayError(self, error: error)
+                        displayError(host: self, error: error)
                     } else {
                         print("")
                     }
-                    
                 }
             }
         }
