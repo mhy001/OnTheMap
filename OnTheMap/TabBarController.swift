@@ -19,11 +19,14 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         
         // Create navigation bar items
+        navigationItem.title = "On The Map"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(getStudentLocations)),
-            UIBarButtonItem(image: UIImage(named: "Pin"), style: .plain, target: self, action: #selector(locate))
+            UIBarButtonItem(image: UIImage(named: "Pin"), style: .plain, target: self, action: #selector(postLocation))
         ]
+
+        getStudentLocations()
     }
 }
 
@@ -36,23 +39,18 @@ extension TabBarController {
     }
     
     func getStudentLocations() {
-        parseClient.getStudentLocations { (studentLocations, error) in
-//            guard (error == nil) else {
-//                displayError(self, error: error)
-//                return
-//            }
-//            
-//            if let studentLocations = studentLocations {
-//                self.studentLocations = studentLocations
-//                performUIUpdatesOnMain {
-//                    self.tableView.reloadData()
-//                    self.tableView.setContentOffset(CGPoint.zero, animated: true)
-//                }
-//            }
+        parseClient.getStudentLocations { (success, error) in
+            if success {
+                NotificationCenter.default.post(name: ParseClient.Notifications.Updated, object: nil)
+            } else {
+                if let error = error {
+                    displayError(host: self, error: error)
+                }
+            }
         }
     }
     
-    func locate() {
+    func postLocation() {
         
     }
 }
