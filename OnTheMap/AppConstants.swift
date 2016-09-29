@@ -20,6 +20,7 @@ struct ErrorStrings {
     static let EmptyCredentials = "Email or password field empty."
     static let FailedLogin = "Login failed."
     static let FailedStudentLocationsUpdate = "Could not update student locations."
+    static let EmptyURL = "No URL found"
 }
 
 // MARK: Alerts

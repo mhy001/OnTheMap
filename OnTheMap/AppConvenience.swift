@@ -15,14 +15,14 @@ func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
     }
 }
 
-// MARK:
-func displayError(_ hostViewController: UIViewController, error: NSError) {
-    let alertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-    alertController.addAction(AlertActions.Dismiss)
-    
+// MARK: Error handler
+func displayError(host hostViewController: UIViewController, error: NSError) {
     print(error)
     
     if (error.code > 0) {
+        let alertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
+        alertController.addAction(AlertActions.Dismiss)
+
         performUIUpdatesOnMain {
             hostViewController.present(alertController, animated: true, completion: nil)
         }
