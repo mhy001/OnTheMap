@@ -6,8 +6,9 @@
 //  Copyright © 2016 Myang. All rights reserved.
 //
 
-// MARK: ParseClient (Constants)
+import Foundation
 
+// MARK: ParseClient (Constants)
 extension ParseClient {
     
     // MARK: Constants
@@ -68,4 +69,9 @@ extension ParseClient {
         static let Updated = "updatedAt"
     }
     
+    // MARK: Notifications
+    struct Notifications {
+        static let Updated = Notification.Name("Updated")
+    }
+
 }

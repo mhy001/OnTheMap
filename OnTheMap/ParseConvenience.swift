@@ -9,10 +9,9 @@
 import Foundation
 
 // MARK: ParseClient (Convenient Resource Methods)
-
 extension ParseClient {
 
-    func getStudentLocations(_ completionHandlerForStudentLocations: @escaping (_ result: [StudentLocation]?, _ error: NSError?) -> Void) {
+    func getStudentLocations(completionHandlerForStudentLocations: @escaping (_ success: Bool, _ error: NSError?) -> Void) {
         let url = getURL()
         let headers = commonHeaders
         let parameters: [String: AnyObject] = [
@@ -21,13 +20,13 @@ extension ParseClient {
         ]
         let getStudentLocationsError = NSError(domain: "getStudentLocations", code: ErrorCodes.Parse, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.FailedStudentLocationsUpdate])
         
-        taskForGETMethod(url, httpHeaders: headers, parameters: parameters) { (result, error) in
+        taskForGETMethod(baseURL: url, httpHeaders: headers, parameters: parameters) { (result, error) in
             
             // GUARD: Was there an error?
             guard (error == nil) else {
                 print(error)
                 
-                completionHandlerForStudentLocations(nil, getStudentLocationsError)
+                completionHandlerForStudentLocations(false, getStudentLocationsError)
                 return
             }
             
@@ -35,9 +34,9 @@ extension ParseClient {
                 let studentLocations = StudentLocation.studentLocationsFromResults(result)
                 self.studentLocations = studentLocations
                 
-                completionHandlerForStudentLocations(studentLocations, nil)
+                completionHandlerForStudentLocations(true, nil)
             } else {
-                completionHandlerForStudentLocations(nil, getStudentLocationsError)
+                completionHandlerForStudentLocations(false, getStudentLocationsError)
             }
         }
     }
