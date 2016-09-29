@@ -28,8 +28,8 @@ struct StudentLocation {
         uniqueKey = dictionary[ParseClient.JSONKeys.UniqueKey] as? String ?? ""
         firstName = dictionary[ParseClient.JSONKeys.FirstName] as? String ?? ""
         lastName  = dictionary[ParseClient.JSONKeys.LastName] as? String ?? ""
-        mapString = dictionary[ParseClient.JSONKeys.LastName] as? String ?? ""
-        mediaURL  = dictionary[ParseClient.JSONKeys.MapString] as? String ?? ""
+        mapString = dictionary[ParseClient.JSONKeys.MapString] as? String ?? ""
+        mediaURL  = dictionary[ParseClient.JSONKeys.MediaURL] as? String ?? ""
         latitude  = dictionary[ParseClient.JSONKeys.Latitude] as? Double ?? 0.0
         longitude = dictionary[ParseClient.JSONKeys.Longitude] as? Double ?? 0.0
         created   = dictionary[ParseClient.JSONKeys.Created] as? String ?? ""
