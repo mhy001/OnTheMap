@@ -177,9 +177,9 @@
 			children = (
 				E93AB4191D79250100A01135 /* LoginViewController.swift */,
 				E9FA5D5A1D866E7900225280 /* WebAuthViewController.swift */,
+				E9E4CB8A1D8A373E000BDC7C /* TabBarController.swift */,
 				E9E4CB861D891C94000BDC7C /* MapViewController.swift */,
 				E9E4CB841D88F1BE000BDC7C /* TableViewController.swift */,
-				E9E4CB8A1D8A373E000BDC7C /* TabBarController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
