@@ -18,10 +18,19 @@ class TableViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: Life Cycle
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         studentLocations = parseClient.studentLocations
+
+        NotificationCenter.default.addObserver(self, selector: #selector(studentLocationsUpdated), name: ParseClient.Notifications.Updated, object: nil)
+    }
+
+    func studentLocationsUpdated() {
+        studentLocations = parseClient.studentLocations
+        performUIUpdatesOnMain {
+            self.tableView.reloadData()
+        }
     }
 }
 
@@ -44,6 +53,19 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         return studentLocations.count
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let url = URL(string: studentLocations[indexPath.row].mediaURL) else {
+            displayError(host: self, error: NSError(domain: "tableView", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.EmptyURL]))
+            return
+        }
+
+        if #available(iOS 10, *) {
+            UIApplication.shared.open(url)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
     }
 }
 
