@@ -11,33 +11,33 @@ import Foundation
 protocol RequestTasks {
     associatedtype requestClient
     static func sharedInstance() -> requestClient
-    func getURL(_ withPathExtension: String?) -> URL
+    func getURL(withPathExtension: String?) -> URL
     func convertData(_ data: Data, completionHandlerForConvertData: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void)
 }
 
 extension RequestTasks {
     
     // MARK: GET
-    func taskForGETMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
-        baseTaskMethod("GET", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForGET)
+    func taskForGETMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        baseTaskMethod(httpMethod: "GET", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForGET)
     }
     
     // MARK: POST
-    func taskForPOSTMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
-        baseTaskMethod("POST", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPOST)
+    func taskForPOSTMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        baseTaskMethod(httpMethod: "POST", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPOST)
     }
     
     // MARK: DELETE
-    func taskForDELETEMethod(_ baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForDELETE: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
-        baseTaskMethod("DELETE", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForDELETE)
+    func taskForDELETEMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForDELETE: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        baseTaskMethod(httpMethod: "DELETE", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForDELETE)
     }
     
     
     // MARK: Private Helpers
-    fileprivate func baseTaskMethod(_ httpMethod: String, baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForTask: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+    fileprivate func baseTaskMethod(httpMethod: String, baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForTask: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         // Build the final URL, Configure the request
-        var request = URLRequest(url: addURLParameters(baseURL, parameters: parameters))
+        var request = URLRequest(url: addURLParameters(baseURL: baseURL, parameters: parameters))
         request.httpMethod = httpMethod
         
         if let httpHeaders = httpHeaders , !httpHeaders.isEmpty {
@@ -51,7 +51,7 @@ extension RequestTasks {
         
         // Make the request
         let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-            if self.checkForRequestErrors("taskFor\(httpMethod)Method", data: data, response: response, error: error, completionHandlerForErrorCheck: completionHandlerForTask) {
+            if self.checkForRequestErrors(domain: "taskFor\(httpMethod)Method", data: data, response: response, error: error, completionHandlerForErrorCheck: completionHandlerForTask) {
                 self.convertData(data!, completionHandlerForConvertData: completionHandlerForTask)
             }
         }) 
@@ -60,7 +60,7 @@ extension RequestTasks {
         task.resume()
     }
     
-    fileprivate func addURLParameters(_ baseURL: URL, parameters: [String: AnyObject]?) -> URL {
+    fileprivate func addURLParameters(baseURL: URL, parameters: [String: AnyObject]?) -> URL {
         
         guard let parameters = parameters , !parameters.isEmpty else {
             return baseURL
@@ -77,7 +77,7 @@ extension RequestTasks {
         return components.url!
     }
     
-    fileprivate func checkForRequestErrors(_ domain: String, data: Data? , response: URLResponse?, error: Error?, completionHandlerForErrorCheck: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> Bool {
+    fileprivate func checkForRequestErrors(domain: String, data: Data? , response: URLResponse?, error: Error?, completionHandlerForErrorCheck: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> Bool {
         
         func sendError(_ error: String) {
             let userInfo = [NSLocalizedDescriptionKey: error]
@@ -127,7 +127,7 @@ extension RequestTasks {
         completionHandlerForConvertData(parsedResult, nil)
     }
     
-    func substituteKeyInMethod(_ method: String, key: String, value: String) -> String? {
+    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
         if method.range(of: "{\(key)}") != nil {
             return method.replacingOccurrences(of: "{\(key)}", with: value)
         } else {
