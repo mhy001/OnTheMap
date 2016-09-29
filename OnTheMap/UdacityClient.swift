@@ -21,7 +21,7 @@ class UdacityClient: NSObject, RequestTasks {
         return Singleton.sharedInstance
     }
     
-    func getURL(_ withPathExtension: String? = nil) -> URL {
+    func getURL(withPathExtension: String? = nil) -> URL {
         var components = URLComponents()
         components.scheme = Constants.Scheme
         components.host = Constants.Host

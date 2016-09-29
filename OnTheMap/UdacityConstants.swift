@@ -7,7 +7,6 @@
 //
 
 // MARK: UdcaityClient (Constants)
-
 extension UdacityClient {
     
     // MARK: Constants
