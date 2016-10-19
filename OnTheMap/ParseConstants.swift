@@ -13,7 +13,6 @@ extension ParseClient {
     
     // MARK: Constants
     struct Constants {
-        
         // URLS
         static let Scheme = "https"
         static let Host = "parse.udacity.com"
@@ -26,7 +25,7 @@ extension ParseClient {
     
     // MARK: Methods
     struct Methods {
-        static let Update = "/{objectID}"
+        static let Update = "/{\(URLKeys.ObjectID)}"
     }
     
     // MARK: URL Keys

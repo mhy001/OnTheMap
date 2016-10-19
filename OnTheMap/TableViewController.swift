@@ -12,7 +12,6 @@ class TableViewController: UIViewController {
     
     // MARK: Properties
     let parseClient = ParseClient.sharedInstance()
-    var studentLocations = [StudentLocation]()
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -20,14 +19,11 @@ class TableViewController: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        studentLocations = parseClient.studentLocations
 
         NotificationCenter.default.addObserver(self, selector: #selector(studentLocationsUpdated), name: ParseClient.Notifications.Updated, object: nil)
     }
 
     func studentLocationsUpdated() {
-        studentLocations = parseClient.studentLocations
         performUIUpdatesOnMain {
             self.tableView.reloadData()
         }
@@ -44,20 +40,25 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         
         // Set cell defaults
-        let studentLocation = studentLocations[(indexPath as NSIndexPath).row]
+        let studentLocation = parseClient.studentLocations[(indexPath as NSIndexPath).row]
         cell?.textLabel!.text = "\(studentLocation.firstName) \(studentLocation.lastName)"
+        cell?.detailTextLabel!.text = "\(studentLocation.mediaURL)"
         cell?.imageView!.image = UIImage(named: "Pin")
         
         return cell!
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-        return studentLocations.count
+        return parseClient.studentLocations.count
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let url = URL(string: studentLocations[indexPath.row].mediaURL) else {
-            displayError(host: self, error: NSError(domain: "tableView", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.EmptyURL]))
+
+        // GUARD: valid url?
+        guard let url = URL(string: parseClient.studentLocations[indexPath.row].mediaURL), canOpenURL(url) else {
+            let errorString = substituteKeyIn(string: ErrorStrings.InvalidURL, key: ErrorStringsKey.URL, value: parseClient.studentLocations[indexPath.row].mediaURL)
+            displayError(host: self, error: NSError(domain: "tableView", code: ErrorCodes.User, userInfo: [NSLocalizedDescriptionKey: errorString]))
+
             return
         }
 

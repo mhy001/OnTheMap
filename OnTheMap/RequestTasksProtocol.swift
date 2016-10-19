@@ -19,16 +19,25 @@ extension RequestTasks {
     
     // MARK: GET
     func taskForGETMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+
         baseTaskMethod(httpMethod: "GET", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForGET)
     }
     
     // MARK: POST
     func taskForPOSTMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+
         baseTaskMethod(httpMethod: "POST", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPOST)
+    }
+
+    // MARK: PUT
+    func taskForPUTMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, jsonBody: String?, completionHandlerForPUT: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+
+        baseTaskMethod(httpMethod: "PUT", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: jsonBody, completionHandlerForTask: completionHandlerForPUT)
     }
     
     // MARK: DELETE
     func taskForDELETEMethod(baseURL: URL, httpHeaders: [String: String]?, parameters: [String: AnyObject]?, completionHandlerForDELETE: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        
         baseTaskMethod(httpMethod: "DELETE", baseURL: baseURL, httpHeaders: httpHeaders, parameters: parameters, jsonBody: nil, completionHandlerForTask: completionHandlerForDELETE)
     }
     
@@ -114,6 +123,7 @@ extension RequestTasks {
     
     // MARK: Public Helpers
     func baseConvertData(_ data: Data, completionHandlerForConvertData: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+
         var parsedResult: AnyObject!
         
         do {
@@ -125,13 +135,5 @@ extension RequestTasks {
         }
         
         completionHandlerForConvertData(parsedResult, nil)
-    }
-    
-    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
-        if method.range(of: "{\(key)}") != nil {
-            return method.replacingOccurrences(of: "{\(key)}", with: value)
-        } else {
-            return nil
-        }
     }
 }

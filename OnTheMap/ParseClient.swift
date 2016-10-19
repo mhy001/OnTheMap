@@ -15,17 +15,21 @@ class ParseClient: NSObject, RequestTasks {
         HTTPHeaderFields.ApplicationID: Constants.ApplicationID,
         HTTPHeaderFields.APIKey: Constants.APIKey
     ]
+    var userLocation: StudentLocation? = nil
     var studentLocations = [StudentLocation]()
     
     // MARK: RequestTasks protocol
     class func sharedInstance() -> ParseClient {
+
         struct Singleton {
             static var sharedInstance = ParseClient()
         }
+        
         return Singleton.sharedInstance
     }
     
     func getURL(withPathExtension: String? = nil) -> URL {
+        
         var components = URLComponents()
         components.scheme = Constants.Scheme
         components.host = Constants.Host

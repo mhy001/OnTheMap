@@ -6,7 +6,7 @@
 //  Copyright © 2016 Myang. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct StudentLocation {
     
@@ -23,7 +23,7 @@ struct StudentLocation {
     var updated: String
     
     // MARK: Initializers
-    init(dictionary: [String: AnyObject]) {
+    init(_ dictionary: [String: AnyObject]) {
         objectID  = dictionary[ParseClient.JSONKeys.ObjectID] as? String ?? ""
         uniqueKey = dictionary[ParseClient.JSONKeys.UniqueKey] as? String ?? ""
         firstName = dictionary[ParseClient.JSONKeys.FirstName] as? String ?? ""
@@ -37,11 +37,10 @@ struct StudentLocation {
     }
     
     static func studentLocationsFromResults(_ results: [[String: AnyObject]]) -> [StudentLocation] {
-        
         var studentLocations = [StudentLocation]()
         
         for result in results {
-            studentLocations.append(StudentLocation(dictionary: result))
+            studentLocations.append(StudentLocation(result))
         }
         
         return studentLocations

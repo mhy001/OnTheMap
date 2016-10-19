@@ -11,18 +11,17 @@ extension UdacityClient {
     
     // MARK: Constants
     struct Constants {
-        
         // URLS
         static let Scheme = "https"
         static let Host = "www.udacity.com"
         static let APIPath = "/api"
-        static let SignUpPath = "/account/auth#!/signup"
+        static let SignUp = "/account/auth#!/signup"
     }
     
     // MARK: Methods
     struct Methods {
         static let Session = "\(Constants.APIPath)/session"
-        static let UserData = "\(Constants.APIPath)/users/{id}"
+        static let UserData = "\(Constants.APIPath)/users/{\(URLKeys.UserID)}"
     }
     
     // MARK: URL Keys
@@ -59,6 +58,9 @@ extension UdacityClient {
         static let UserKey = "key"
         static let Registered = "registered"
         static let Session = "session"
+        static let User = "user"
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
     }
     
 }

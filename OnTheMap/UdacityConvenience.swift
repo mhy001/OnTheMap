@@ -12,6 +12,7 @@ import UIKit
 extension UdacityClient {
     
     func authenticate(username: String, password: String, completionHandlerForAuth: @escaping (_ success: Bool, _ error: NSError?) -> Void) {
+
         let url = getURL(withPathExtension: Methods.Session)
         let headers = [
             HTTPHeaderFields.Accept: HTTPHeaderValues.JSON,
@@ -42,10 +43,11 @@ extension UdacityClient {
                 if let userID = account[JSONResponseKeys.UserKey] as? String, let registered = account[JSONResponseKeys.Registered] as? Bool , registered == true {
                     self.userID = userID
                     completionHandlerForAuth(true, nil)
+                    self.getUserData(userID: userID)
                     return
                 }
             }
-
+            
             // Catch-all failure
             completionHandlerForAuth(false, NSError(domain: "authenticate", code: ErrorCodes.Udacity, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.FailedLogin]))
         }
@@ -54,6 +56,34 @@ extension UdacityClient {
     func authenticateWithViewController(_ hostViewController: UIViewController, completionHandlerForAuth: (_ success: Bool, _ error: NSError?) -> Void) {
         //let url = getURL(Constants.SignUpPath)
         
+    }
+
+    func getUserData(userID: String) {
+
+        let url = getURL(withPathExtension: substituteKeyIn(string: Methods.UserData, key: URLKeys.UserID, value: userID))
+
+        taskForGETMethod(baseURL: url, httpHeaders: nil, parameters: nil) { (results, error) in
+
+            //GUARD: Was there an error?
+            guard (error == nil) else {
+                print(error)
+                return
+            }
+
+            guard let user = results?[JSONResponseKeys.User] as? [String: AnyObject] else {
+                print("No Udacity user found")
+
+                return
+            }
+
+            // Get user first and last name
+            if let firstName = user[JSONResponseKeys.FirstName] as? String, let lastName = user[JSONResponseKeys.LastName] as? String {
+                self.firstName = firstName
+                self.lastName = lastName
+            } else {
+                print("Udacity user has no name")
+            }
+        }
     }
     
     func logout() {
