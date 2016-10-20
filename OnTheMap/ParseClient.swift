@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ParseClient: NSObject, RequestTasks {
+class ParseClient: RequestTasks {
 
     // MARK: Properties
     let commonHeaders = [

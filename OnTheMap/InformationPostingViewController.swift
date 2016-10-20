@@ -125,6 +125,16 @@ class InformationPostingViewController: UIViewController {
 
 }
 
+// MARK: InformationPostingViewController: UITextFieldDelegate
+extension InformationPostingViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 // MARK: Configure UI
 extension InformationPostingViewController {
 
@@ -139,8 +149,10 @@ extension InformationPostingViewController {
         attributedString.addAttributes([NSFontAttributeName: UIFont.boldSystemFont(ofSize: 25)], range: range)
         label.attributedText = attributedString
 
+        linkField.delegate = self
         linkField.attributedPlaceholder = NSAttributedString(string: Strings.EnterLink, attributes: [NSForegroundColorAttributeName: UIColor.white])
 
+        locationField.delegate = self
         locationField.attributedPlaceholder = NSAttributedString(string: Strings.EnterLocation, attributes: [NSForegroundColorAttributeName: UIColor.white])
 
         findOnMapButton.setTitle(Strings.FindOnMap, for: .normal)
@@ -159,7 +171,7 @@ extension InformationPostingViewController {
         findOnMapButton.isHidden = !start
 
         linkView.isHidden = start
-        mapView.isHidden = start
+        mapView.alpha = start ? 0.0 : 1.0
         submitButton.isHidden = start
 
         if start {
@@ -197,6 +209,5 @@ extension InformationPostingViewController {
         locationField.alpha = enabled ? 1.0 : 0.5
         findOnMapButton.alpha = enabled ? 1.0 : 0.5
         submitButton.alpha = enabled ? 1.0 : 0.5
-        mapView.alpha = enabled ? 1.0 : 0.5
     }
 }

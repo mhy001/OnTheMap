@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UdacityClient: NSObject, RequestTasks {
+class UdacityClient: RequestTasks {
     
     // MARK: Properties
     var userID = String()

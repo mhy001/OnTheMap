@@ -10,17 +10,17 @@ import UIKit
 
 struct StudentLocation {
     
-    // MARK: Properties
+    // MARK: Properties (commented properties are not currently used but may be used in the future)
     var objectID: String
     var uniqueKey: String?
     var firstName: String
     var lastName: String
-    var mapString: String
+    //var mapString: String
     var mediaURL: String
     var latitude: Double
     var longitude: Double
-    var created: String
-    var updated: String
+    //var created: String
+    //var updated: String
     
     // MARK: Initializers
     init(_ dictionary: [String: AnyObject]) {
@@ -28,12 +28,12 @@ struct StudentLocation {
         uniqueKey = dictionary[ParseClient.JSONKeys.UniqueKey] as? String ?? ""
         firstName = dictionary[ParseClient.JSONKeys.FirstName] as? String ?? ""
         lastName  = dictionary[ParseClient.JSONKeys.LastName] as? String ?? ""
-        mapString = dictionary[ParseClient.JSONKeys.MapString] as? String ?? ""
+        //mapString = dictionary[ParseClient.JSONKeys.MapString] as? String ?? ""
         mediaURL  = dictionary[ParseClient.JSONKeys.MediaURL] as? String ?? ""
         latitude  = dictionary[ParseClient.JSONKeys.Latitude] as? Double ?? 0.0
         longitude = dictionary[ParseClient.JSONKeys.Longitude] as? Double ?? 0.0
-        created   = dictionary[ParseClient.JSONKeys.Created] as? String ?? ""
-        updated   = dictionary[ParseClient.JSONKeys.Updated] as? String ?? ""
+        //created   = dictionary[ParseClient.JSONKeys.Created] as? String ?? ""
+        //updated   = dictionary[ParseClient.JSONKeys.Updated] as? String ?? ""
     }
     
     static func studentLocationsFromResults(_ results: [[String: AnyObject]]) -> [StudentLocation] {

@@ -179,23 +179,6 @@
                                             <constraint firstAttribute="trailing" secondItem="lkV-TF-cRx" secondAttribute="trailing" id="wDR-ml-TL1"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYC-5F-iiR">
-                                        <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="g48-4J-0Bw">
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.3160236776" green="0.53838980199999997" blue="0.704847157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="150" id="H1C-A5-KlY"/>
-                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="leading" secondItem="cYC-5F-iiR" secondAttribute="leading" id="Ih5-q8-aHv"/>
-                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="centerY" secondItem="cYC-5F-iiR" secondAttribute="centerY" id="Pp4-UU-eH8"/>
-                                            <constraint firstAttribute="trailing" secondItem="g48-4J-0Bw" secondAttribute="trailing" id="XOL-yk-1Kl"/>
-                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="centerX" secondItem="cYC-5F-iiR" secondAttribute="centerX" id="fSA-Bq-YVY"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QwM-kd-vuJ">
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iQc-79-oHM">
@@ -211,6 +194,23 @@
                                             <constraint firstAttribute="trailing" secondItem="iQc-79-oHM" secondAttribute="trailing" id="mE7-pc-9hB"/>
                                             <constraint firstItem="iQc-79-oHM" firstAttribute="leading" secondItem="QwM-kd-vuJ" secondAttribute="leading" id="nIa-Lq-7Le"/>
                                             <constraint firstAttribute="height" constant="150" id="y8G-9n-B8X"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYC-5F-iiR">
+                                        <subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="g48-4J-0Bw">
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.3160236776" green="0.53838980199999997" blue="0.704847157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="150" id="H1C-A5-KlY"/>
+                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="leading" secondItem="cYC-5F-iiR" secondAttribute="leading" id="Ih5-q8-aHv"/>
+                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="centerY" secondItem="cYC-5F-iiR" secondAttribute="centerY" id="Pp4-UU-eH8"/>
+                                            <constraint firstAttribute="trailing" secondItem="g48-4J-0Bw" secondAttribute="trailing" id="XOL-yk-1Kl"/>
+                                            <constraint firstItem="g48-4J-0Bw" firstAttribute="centerX" secondItem="cYC-5F-iiR" secondAttribute="centerX" id="fSA-Bq-YVY"/>
                                         </constraints>
                                     </view>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="uOn-NR-H93"/>
@@ -385,10 +385,10 @@
             </objects>
             <point key="canvasLocation" x="2532" y="171"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tab Bar View Controller-->
         <scene sceneID="1uC-rK-dQ2">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yXO-qb-fOh" customClass="TabBarController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yXO-qb-fOh" customClass="TabBarViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="tC5-v8-fdw"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="goy-MG-mKa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>

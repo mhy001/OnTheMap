@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+class TabBarViewController: UITabBarController {
     
     // MARK: Properties
     let udacityClient = UdacityClient.sharedInstance()
@@ -36,8 +36,8 @@ class TabBarController: UITabBarController {
     }
 }
 
-// MARK: TabBarController (Actions)
-extension TabBarController {
+// MARK: TabBarViewController (Actions)
+extension TabBarViewController {
     
     func logout() {
 

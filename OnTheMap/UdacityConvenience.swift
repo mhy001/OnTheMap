@@ -52,11 +52,6 @@ extension UdacityClient {
             completionHandlerForAuth(false, NSError(domain: "authenticate", code: ErrorCodes.Udacity, userInfo: [NSLocalizedDescriptionKey: ErrorStrings.FailedLogin]))
         }
     }
-    
-    func authenticateWithViewController(_ hostViewController: UIViewController, completionHandlerForAuth: (_ success: Bool, _ error: NSError?) -> Void) {
-        //let url = getURL(Constants.SignUpPath)
-        
-    }
 
     func getUserData(userID: String) {
 
